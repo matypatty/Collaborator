@@ -3,6 +3,7 @@ package com.example.mathew.collaborator;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Message;
@@ -90,16 +91,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-
-        //And for the register button
-        Button mRegisterButton = (Button) findViewById(R.id.button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                registerAccount();
-            }
-        });
-
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
@@ -148,11 +139,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
 
-    private void registerAccount()
+    public void registerAccount(View v)
     {
-        Intent intent=new Intent(LoginActivity.this,Register.class);
-        startActivity(intent);
-       // startActivity(new Intent(getApplicationContext(),Register.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        startActivity(new Intent(this,Register.class));
     }
 
     /**
@@ -322,9 +311,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
-
-
+        protected Boolean doInBackground(Void... params)
+        {
             try
             {
                 //Check login against API
@@ -351,8 +339,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                Toast.makeText(getApplicationContext(), "we made it", Toast.LENGTH_LONG).show();
-               // finish();
+                startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
