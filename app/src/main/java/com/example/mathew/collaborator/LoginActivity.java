@@ -349,7 +349,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             if (success >= 0)
             {
-                Intent i = new Intent(getApplicationContext(), ChatActivity.class);
+                Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 i.putExtra("userid",success);
                 startActivity(i);
                 finish();
