@@ -24,6 +24,14 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        //Load all of the groups
+        loadContent();
+    }
+
+    private void loadContent()
+    {
+        //http://www.collaborator.pw/api.php?Action=GetGroups
     }
 
 }

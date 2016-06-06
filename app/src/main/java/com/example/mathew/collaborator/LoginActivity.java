@@ -36,6 +36,7 @@ import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -302,12 +303,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-        private final String mEmail;
-        private final String mPassword;
+        private String mEmail;
+        private String mPassword;
 
         UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
+            try
+            {
+                mEmail = URLEncoder.encode(email, "utf-8");
+                mPassword = URLEncoder.encode(password, "utf-8");
+            }
+            catch(Exception ex)
+            {
+
+            }
         }
 
         @Override
@@ -325,12 +333,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             catch(Exception ex)
             {
                 //The only error here would be not being able to reach the server.
-                Toast.makeText(getApplicationContext(), "Unable to connect to the server.", Toast.LENGTH_LONG).show();
+                return false;
             }
-
-            //If we made it this far the login has failed.
-            Toast.makeText(getApplicationContext(), "Login fail.", Toast.LENGTH_LONG).show();
-            return false;
         }
 
         @Override

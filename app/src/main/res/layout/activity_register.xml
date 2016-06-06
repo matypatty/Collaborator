@@ -13,17 +13,23 @@
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/progressBarregister" />
+        android:id="@+id/progressBarregister"
+        android:visibility="invisible" />
 
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/registerview" >
+        android:id="@+id/registerview"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/progressBarregister"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true">
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -76,7 +82,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
-                android:text="Name"
                 android:ems="10"
                 android:id="@+id/editText_name"
                 android:layout_below="@+id/textView3"
@@ -100,7 +105,9 @@
                 android:layout_below="@+id/textView4"
                 android:layout_alignParentStart="true"
                 android:layout_alignEnd="@+id/textView5"
-                android:checked="false" />
+                android:checked="true"
+                android:onClick="malechecked"
+                android:nestedScrollingEnabled="true" />
 
             <RadioButton
                 android:layout_width="wrap_content"
@@ -109,7 +116,8 @@
                 android:id="@+id/radioButton2female"
                 android:layout_alignTop="@+id/radioButtonmale"
                 android:layout_toStartOf="@+id/button2"
-                android:checked="false" />
+                android:checked="false"
+                android:onClick="femalechecked" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -139,6 +147,7 @@
                 android:clickable="true"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true" />
+
         </LinearLayout>
     </ScrollView>
 
