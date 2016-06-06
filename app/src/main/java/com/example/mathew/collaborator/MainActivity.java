@@ -17,12 +17,14 @@ import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
     private ListView listView;
+    private EditText groupSetter;
     private int userID;
     private HashMap<String, Integer> groups = new HashMap<>();
     @Override
@@ -31,14 +33,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        groupSetter = (EditText)findViewById(R.id.editText3);
         listView = (ListView) findViewById(R.id.listView);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                setGroupTask task = new setGroupTask();
+                try
+                {
+                    task.group = URLEncoder.encode(groupSetter.getText().toString(), "utf-8");
+                    task.friendly = groupSetter.getText().toString();
+                }
+                catch(Exception ex)
+                {
+
+                }
+                task.execute();
             }
         });
 
@@ -55,6 +66,40 @@ public class MainActivity extends AppCompatActivity {
     {
         //http://www.collaborator.pw/api.php?Action=GetGroups
         new getGroupTask().execute();
+    }
+
+    class setGroupTask extends AsyncTask<Void, Void, Integer> {
+
+        public String group, friendly;
+        private Exception exception;
+
+        protected Integer doInBackground(Void... params) {
+            try
+            {
+                ArrayList<String> rooms = new ArrayList<>();
+                URL url = new URL(Config.API_BASE + "AddGroup&user=" + userID + "&group=" + group);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+                return Integer.parseInt(reader.readLine());
+            }
+            catch (Exception e)
+            {
+                return -1;
+            }
+        }
+
+        protected void onPostExecute(Integer result) {
+            groupSetter.setText("");
+            if(result >= 0)
+            {
+                loadContent();
+                Intent i = new Intent(getApplicationContext(), ChatActivity.class);
+                i.putExtra("group", result);
+                i.putExtra("groupname", friendly);
+                i.putExtra("userid", userID);
+                startActivity(i);
+            }
+
+        }
     }
 
     class getGroupTask extends AsyncTask<Void, Void, ArrayList<String>> {
@@ -85,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this,android.R.layout.simple_list_item_1, android.R.id.text1, result);
             listView.setAdapter(adapter);
+            listView.setSelection(adapter.getCount() - 1);
 
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
