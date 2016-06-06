@@ -301,7 +301,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    public class UserLoginTask extends AsyncTask<Void, Void, Integer> {
 
         private String mEmail;
         private String mPassword;
@@ -319,7 +319,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
         @Override
-        protected Boolean doInBackground(Void... params)
+        protected Integer doInBackground(Void... params)
         {
             try
             {
@@ -328,24 +328,34 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
                 String s = reader.readLine();
 
-                return s.equals("true");
+                if(s.equals("false"))
+                    return -1;
+
+                else return Integer.parseInt(s);
+
+
             }
             catch(Exception ex)
             {
                 //The only error here would be not being able to reach the server.
-                return false;
+                return -1;
             }
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
+        protected void onPostExecute(final Integer success) {
             mAuthTask = null;
             showProgress(false);
 
-            if (success) {
-                startActivity(new Intent(LoginActivity.this,MainActivity.class));
+            if (success >= 0)
+            {
+                Intent i = new Intent(getApplicationContext(), ChatActivity.class);
+                i.putExtra("userid",success);
+                startActivity(i);
                 finish();
-            } else {
+            }
+            else
+            {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }
