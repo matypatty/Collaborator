@@ -34,7 +34,7 @@ public class ChatActivity extends AppCompatActivity {
         if (extras != null) {
             groupID = extras.getInt("group");
             userID = extras.getInt("userid");
-            setTitle(extras.getString("groupname"));
+            setTitle("Collaborator : " + extras.getString("groupname"));
         }
 
         TextView.OnEditorActionListener enterListener = new TextView.OnEditorActionListener(){
